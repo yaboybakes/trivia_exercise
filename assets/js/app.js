@@ -65,6 +65,7 @@ $(document).ready(function() {
       clearInterval(counter);
       if (q_array_index < questions.length) {
           $('.timer').html("");
+          start_game();
       } else {
           game_over = true;
       }
