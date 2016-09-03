@@ -1,0 +1,58 @@
+body{
+  background-image: url('http://media.jrn.com/images/N0012328051--73446.JPG');
+  background-size: cover;
+}
+
+
+#title{
+  text-align:center;
+  color: tomato;
+}
+
+.timer {
+  text-align: right;
+  margin-right: 10%;
+  font-family: 'Poiret One', cursive;
+}
+
+.questions {
+  text-align: center;
+  font-family: 'Poiret One', cursive;
+  font-size: 30px;
+  margin-top: 5%;
+}
+
+.game-template {
+  margin-top: 10%;
+  margin-left: 10%;
+  margin-right: 10%;
+  height: 500px;
+  width: 80%;
+  background-color: grey;
+}
+
+#q1{
+  border: 1px solid;
+  width: 30%;
+  margin-left: 35%;
+}
+#q2{
+  border: 1px solid;
+  width: 30%;
+  margin-left: 35%;
+}
+#q3{
+  border: 1px solid;
+  width: 30%;
+  margin-left: 35%;
+}
+#q4{
+  border: 1px solid;
+  width: 30%;
+  margin-left: 35%;
+}
+#q5{
+  border: 1px solid;
+  width: 30%;
+  margin-left: 35%;
+}
