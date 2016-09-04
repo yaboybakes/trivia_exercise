@@ -2,6 +2,8 @@ var q_array_index = 0;
 var correct = 0;
 var game_over = false;
 var time_left = 30;
+var missed = 3;
+var flag = true;
 
 var questions = [
 {
@@ -21,6 +23,11 @@ var questions = [
 }];
 
 $(document).ready(function() {
+
+  $('button').click(function() {
+    alert('ok');
+  });
+
   start_game();
 
   function start_game() {
@@ -43,13 +50,21 @@ $(document).ready(function() {
 }
 
   function start_timer(){
+    if (flag == true) {
       counter = setInterval(update_timer, 1000);
+      flag = false;
+    } else {
+      flag = true;
+    }
   }
 
 
+
+
   function update_timer(){
+
       time_left--;
-      $('.timer').html('<h3>'+time_left + 'seconds</h3>');
+      $('.timer').html('<h3>' + time_left + 'seconds</h3>');
 
       if (time_left == 0){
           $('.timer').empty();
@@ -59,16 +74,29 @@ $(document).ready(function() {
   }
 
   function stop_timer(){
+
       q_array_index++;
       time_left = 30;
 
       clearInterval(counter);
-      if (q_array_index < questions.length) {
-          $('.timer').html("");
+      if (q_array_index < 1) {
+          start_timer();
           start_game();
       } else {
-          game_over = true;
+          game_over();
       }
   }
+
+  function game_over() {
+    var wrong = (questions.length - missed + correct);
+    $('.trivia').empty();
+    $('#q1').html('You got ' + correct + ' questions right.');
+    $('#q2').html('You missed ' + missed + ' questions.') ;
+    $('#q3').html('You got ' + wrong + ' questions wrong.');
+    $('#q4').html('Replay?');
+    $('#q5').html('<button id="yes">Yes</button><button id="no">NO</button>');
+  }
+
+
 
 });
