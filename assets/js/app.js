@@ -1,7 +1,7 @@
 var q_array_index = 0;
 var correct = 0;
 var game_over = false;
-var time_left = 10;
+var time_left = 30;
 var missed = 3;
 var flag = true;
 
@@ -27,6 +27,8 @@ $(document).ready(function() {
   start_game();
 
   function start_game() {
+    console.log('start');
+    start_timer();
 
     var question = questions[q_array_index].question;
     var q0 = $(document).find("#q0");
@@ -35,6 +37,7 @@ $(document).ready(function() {
     var q3 = $(document).find("#q3");
     var q4 = $(document).find("#q4");
     var q5 = $(document).find("#q5");
+    var answer = questions[q_array_index].correct;
 
     $(q0).text(question);
     $(q1).text(questions[q_array_index].answers[0]);
@@ -42,10 +45,24 @@ $(document).ready(function() {
     $(q3).text(questions[q_array_index].answers[2]);
     $(q4).text(questions[q_array_index].answers[3]);
     $(q5).text(questions[q_array_index].answers[4]);
-    start_timer();
+
     $('.trivia').click(function() {
-      alert($(this).attr('id'));
+      console.log('click');
+      missed--;
+      if (answer == 0) {
+        answer = 1;
+      }
+      var ans = "q" + answer;
+      var guess = $(this).attr('id');
+      console.log(ans);
+      console.log(guess);
+
+      if (guess == ans) {
+        correct++;
+        console.log('correct');
+      }
     });
+
 }
 
   function start_timer(){
@@ -56,9 +73,6 @@ $(document).ready(function() {
       flag = true;
     }
   }
-
-
-
 
   function update_timer(){
 
@@ -79,7 +93,7 @@ $(document).ready(function() {
 
       clearInterval(counter);
 
-      if (q_array_index < 1) {
+      if (q_array_index < questions.length) {
           start_timer();
           start_game();
       } else {
