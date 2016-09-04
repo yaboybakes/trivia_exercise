@@ -1,7 +1,7 @@
 var q_array_index = 0;
 var correct = 0;
 var game_over = false;
-var time_left = 30;
+var time_left = 10;
 var missed = 3;
 var flag = true;
 
@@ -24,10 +24,6 @@ var questions = [
 
 $(document).ready(function() {
 
-  $('button').click(function() {
-    alert('ok');
-  });
-
   start_game();
 
   function start_game() {
@@ -47,6 +43,9 @@ $(document).ready(function() {
     $(q4).text(questions[q_array_index].answers[3]);
     $(q5).text(questions[q_array_index].answers[4]);
     start_timer();
+    $('.trivia').click(function() {
+      alert($(this).attr('id'));
+    });
 }
 
   function start_timer(){
@@ -79,6 +78,7 @@ $(document).ready(function() {
       time_left = 30;
 
       clearInterval(counter);
+
       if (q_array_index < 1) {
           start_timer();
           start_game();
@@ -95,6 +95,19 @@ $(document).ready(function() {
     $('#q3').html('You got ' + wrong + ' questions wrong.');
     $('#q4').html('Replay?');
     $('#q5').html('<button id="yes">Yes</button><button id="no">NO</button>');
+    $('#yes').click(function() {
+      var q_array_index = 0;
+      var correct = 0;
+      var game_over = false;
+      var time_left = 30;
+      var missed = 3;
+      var flag = true;
+      start_game();
+    });
+    $('#no').click(function() {
+      $('.trivia').empty();
+      $('#q3').html('Game Over');
+    });
   }
 
 
