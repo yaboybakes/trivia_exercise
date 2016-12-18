@@ -1,14 +1,14 @@
 var questions = [{
     question: "What year did the Titanic sink?",
-    choices: [1912,1913,1914,1915,1916],
+    choices: [1912, 1913, 1914, 1915, 1916],
     correctAnswer: 0
 }, {
     question: "How many furlongs are in a mile?",
-    choices: [2,4,6,8,10],
+    choices: [2, 4, 6, 8, 10],
     correctAnswer: 3
 }, {
     question: "How many problems does Jay-Z have?",
-    choices: [25,50,75,99,100],
+    choices: [25, 50, 75, 99, 100],
     correctAnswer: 4
 }];
 
@@ -17,17 +17,17 @@ var correctAnswers = 0;
 var quizOver = false;
 var number = 20;
 
-$(document).ready(function () {
+$(document).ready(function() {
 
     displayCurrentQuestion();
 
-    $(this).find(".nextbtn").on("click", function () {
+    $(this).find(".nextbtn").on("click", function() {
         if (!quizOver) {
 
             value = $("input[type='radio']:checked").val();
 
             if (value == undefined) {
-                $(document).find(".quizMessage").text("Please select an answer");
+                $(document).find(".quizMessage").text("Pick your answer carefully!");
                 $(document).find(".quizMessage").show();
             } else {
                 $(document).find(".quizMessage").hide();
@@ -45,7 +45,7 @@ $(document).ready(function () {
                     $('#time-left').html('');
                     displayScore();
 
-                    $(document).find(".nextButton").text("Play Again?");
+                    $(document).find(".nextButton").text("Replay?");
                     clearInterval(counter);
                     number = 20;
                     quizOver = true;
@@ -53,7 +53,7 @@ $(document).ready(function () {
             }
         } else {
             quizOver = false;
-            $(document).find(".nextButton").text("Next");
+            $(document).find(".nextButton").text("Next Question");
             resetQuiz();
             displayCurrentQuestion();
             hideScore();
@@ -86,39 +86,43 @@ function resetQuiz() {
     currentQuestion = 0;
     correctAnswers = 0;
     hideScore();
+    $(document).find(".nextbtn").text("Next Question");
 }
 
 function displayScore() {
     $(document).find(".quizContainer > .result").text("You scored: " + correctAnswers + " out of: " + questions.length);
     $(document).find(".quizContainer > .result").show();
+    $(document).find(".nextbtn").text("Replay?");
 }
 
 function hideScore() {
     $(document).find(".result").hide();
 }
 
-function runTimer(){
-            counter = setInterval(decrement, 1000);
-        }
-        function decrement(){
-            number--;
-            $('#time-left').html('<h2> You have ' + number + ' Seconds to answer</h2>');
-            if (number === 0){
-                $('#time-left').html('Time Up !!!!');
-                stop();
+function runTimer() {
+    counter = setInterval(decrement, 1000);
+}
 
-            }
-        }
-        function stop(){
-            clearInterval(counter);
-            number = 20;
-            currentQuestion++;
-        if (currentQuestion < questions.length) {
-              displayCurrentQuestion();
-              $('#time-left').html('');
-        } else {
-          displayScore();
-         $(document).find(".nextButton").text("Play Again?");
-         quizOver = true;
-        }
-        }
+function decrement() {
+    number--;
+    $('#time-left').html('<h2>' + number + ' seconds left</h2>');
+    if (number === 0) {
+        $('#time-left').html('Time Up !!!!');
+        stop();
+
+    }
+}
+
+function stop() {
+    clearInterval(counter);
+    number = 20;
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+        displayCurrentQuestion();
+        $('#time-left').html('');
+    } else {
+        displayScore();
+        $(document).find(".nextbtn").text("Replay?");
+        quizOver = true;
+    }
+}
