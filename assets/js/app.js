@@ -1,159 +1,124 @@
-var q_array_index = 0;
-var correct = 0;
-var game_over = false;
-var time_left = 30;
-var missed = 3;
-var flag = true;
-var wrong = 0;
-
-var questions = [
-{
+var questions = [{
     question: "What year did the Titanic sink?",
-    answers: [1912,1913,1914,1915,1916],
-    correct: 0
-},
-{
+    choices: [1912,1913,1914,1915,1916],
+    correctAnswer: 0
+}, {
     question: "How many furlongs are in a mile?",
-    answers: [2,4,6,8,10],
-    correct: 3
-},
-{
+    choices: [2,4,6,8,10],
+    correctAnswer: 3
+}, {
     question: "How many problems does Jay-Z have?",
-    answers: [25,50,75,99,100],
-    correct: 4
+    choices: [25,50,75,99,100],
+    correctAnswer: 4
 }];
 
-$(document).ready(function() {
+var currentQuestion = 0;
+var correctAnswers = 0;
+var quizOver = false;
+var number = 20;
 
-  start_game();
+$(document).ready(function () {
 
-  function refresh() {
-    console.log('refresh');
-    stop_timer();
-    console.log('index: ' + q_array_index);
-    question = questions[q_array_index].question;
-    answer = questions[q_array_index].correct;
-    console.log('new answer: '+ answer);
-    $(q0).text(question);
-    $(q1).text(questions[q_array_index].answers[0]);
-    $(q2).text(questions[q_array_index].answers[1]);
-    $(q3).text(questions[q_array_index].answers[2]);
-    $(q4).text(questions[q_array_index].answers[3]);
-    $(q5).text(questions[q_array_index].answers[4]);
-  }
+    displayCurrentQuestion();
 
-  function start_game() {
+    $(this).find(".nextbtn").on("click", function () {
+        if (!quizOver) {
 
-    start_timer();
-    var question = questions[q_array_index].question;
-    var q0 = $(document).find("#q0");
-    var q1 = $(document).find("#q1");
-    var q2 = $(document).find("#q2");
-    var q3 = $(document).find("#q3");
-    var q4 = $(document).find("#q4");
-    var q5 = $(document).find("#q5");
-    answer = questions[q_array_index].correct;
+            value = $("input[type='radio']:checked").val();
 
+            if (value == undefined) {
+                $(document).find(".quizMessage").text("Please select an answer");
+                $(document).find(".quizMessage").show();
+            } else {
+                $(document).find(".quizMessage").hide();
+                if (value == questions[currentQuestion].correctAnswer) {
+                    correctAnswers++;
+                }
 
-    $(q0).text(question);
-    $(q1).text(questions[q_array_index].answers[0]);
-    $(q2).text(questions[q_array_index].answers[1]);
-    $(q3).text(questions[q_array_index].answers[2]);
-    $(q4).text(questions[q_array_index].answers[3]);
-    $(q5).text(questions[q_array_index].answers[4]);
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    clearInterval(counter);
+                    number = 20;
+                    displayCurrentQuestion();
 
-    $('.trivia').click(function() {
+                } else {
+                    $('#time-left').html('');
+                    displayScore();
 
-      missed--;
-      if (missed < 0) {
-        missed = 0;
-      }
-
-      if (answer == 0) {
-        answer = 1;
-      }
-      console.log('answer: ' + answer);
-      var ans = "q" + answer;
-      var guess = $(this).attr('id');
-      console.log('ans: ' + ans);
-      console.log('guess:' + guess);
-
-      if (guess == ans) {
-        correct++;
-        console.log('correct');
-      } else {
-        wrong++;
-      }
-
-      refresh();
+                    $(document).find(".nextButton").text("Play Again?");
+                    clearInterval(counter);
+                    number = 20;
+                    quizOver = true;
+                }
+            }
+        } else {
+            quizOver = false;
+            $(document).find(".nextButton").text("Next");
+            resetQuiz();
+            displayCurrentQuestion();
+            hideScore();
+        }
     });
-
-}
-
-  function start_timer(){
-    if (flag == true) {
-      counter = setInterval(update_timer, 1000);
-      flag = false;
-    } else {
-      flag = true;
-    }
-  }
-
-  function update_timer(){
-
-      time_left--;
-      $('.timer').html('<h3>' + time_left + 'seconds</h3>');
-
-      if (time_left == 0){
-          $('.timer').empty();
-          stop_timer();
-      }
-
-  }
-
-  function stop_timer(){
-
-      q_array_index++;
-      if (q_array_index > questions.length) {
-        q_array_index = 0;
-        correct = 0;
-      }
-      time_left = 30;
-
-      clearInterval(counter);
-
-      if (q_array_index < questions.length) {
-          start_timer();
-      } else {
-          game_over();
-      }
-  }
-
-  function game_over() {
-    $('.timer').empty();
-    $('.trivia').empty();
-    $('#q1').html('You got ' + correct + ' questions right.');
-    $('#q2').html('You missed ' + missed + ' questions.') ;
-    $('#q3').html('You got ' + wrong + ' questions wrong.');
-    $('#q4').html('Replay?');
-    $('#q5').html('<button id="yes">Yes</button><button id="no">NO</button>');
-
-    $('#yes').click(function() {
-      var q_array_index = 0;
-      var correct = 0;
-      var game_over = false;
-      var time_left = 30;
-      var missed = 3;
-      var flag = true;
-      start_game();
-    });
-    $('#no').click(function() {
-      console.log('no');
-      $('.trivia').empty();
-      $('.timer').html("");
-      $('#q3').html('Game Over');
-    });
-  }
-
 
 });
+
+function displayCurrentQuestion() {
+
+    console.log("In display current Question");
+
+    var question = questions[currentQuestion].question;
+    var questionClass = $(document).find(".quizContainer > .question");
+    var choiceList = $(document).find(".quizContainer > .choiceList");
+    var numChoices = questions[currentQuestion].choices.length;
+
+    $(questionClass).text(question);
+    $(choiceList).find("li").remove();
+
+    var choice;
+    for (i = 0; i < numChoices; i++) {
+        choice = questions[currentQuestion].choices[i];
+        $('<li><input type="radio" value=' + i + ' name="dynradio" />' + choice + '</li>').appendTo(choiceList);
+    }
+    runTimer();
+}
+
+function resetQuiz() {
+    currentQuestion = 0;
+    correctAnswers = 0;
+    hideScore();
+}
+
+function displayScore() {
+    $(document).find(".quizContainer > .result").text("You scored: " + correctAnswers + " out of: " + questions.length);
+    $(document).find(".quizContainer > .result").show();
+}
+
+function hideScore() {
+    $(document).find(".result").hide();
+}
+
+function runTimer(){
+            counter = setInterval(decrement, 1000);
+        }
+        function decrement(){
+            number--;
+            $('#time-left').html('<h2> You have ' + number + ' Seconds to answer</h2>');
+            if (number === 0){
+                $('#time-left').html('Time Up !!!!');
+                stop();
+
+            }
+        }
+        function stop(){
+            clearInterval(counter);
+            number = 20;
+            currentQuestion++;
+        if (currentQuestion < questions.length) {
+              displayCurrentQuestion();
+              $('#time-left').html('');
+        } else {
+          displayScore();
+         $(document).find(".nextButton").text("Play Again?");
+         quizOver = true;
+        }
+        }
